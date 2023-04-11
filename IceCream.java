@@ -7,7 +7,15 @@ public class IceCream {
     private boolean isDeluxeBrand;
     private ArrayList<Topping> toppings;
     public double totalPrice;
+    public String isEmpty;
+    public double finalTotal = 0.00;
+    public String type;
 
+    public IceCream() {
+        isDeluxeBrand = false;
+        toppings = new ArrayList<Topping>();
+    }
+    
     public boolean validateFlavor(String flavor) {
         return flavor.equalsIgnoreCase("Vanilla") || 
             flavor.equalsIgnoreCase("Chocolate") || 
@@ -16,23 +24,26 @@ public class IceCream {
 
     public void setFlavor(String flavor) {
         this.flavor = flavor;
-        switch flavor {
-                case flavor.equalsIgnoreCase("Vanilla"):
+        switch (flavor) {
+                case "vanilla":
+                case "Vanilla": 
                     pricePerScoop = 1.05;
                 break;
 
-                case flavor.equalsIgnoreCase("Chocolate"):
+                case "chocolate":
+                case "Chocolate":
                     pricePerScoop = 1.12;
                 break;
 
-                case flavor.equalsIgnoreCase("Strawberry");
+                case "strawberry":
+                case "Strawberry":
                     pricePerScoop = 1.32;
                 break;
             }
     }
 
     public String getFlavor() {
-        return flavor;
+        return this.flavor;
     }
 
     public void setDeluxeBrand(boolean isDeluxeBrand) {
@@ -40,7 +51,7 @@ public class IceCream {
     }
 
     public boolean getDeluxeBrand() {
-        return isDeluxeBrand;
+        return this.isDeluxeBrand;
     }
 
     public void setNumScoops(int numScoops) {
@@ -48,16 +59,53 @@ public class IceCream {
     }
 
     public int getNumScoops() {
-        return numScoops;
+        return this.numScoops;
     }
 
-    public void calcTotal() {
+    public double calcTotal() {
         if (isDeluxeBrand == true) {
-            totalPrice = numScoops * pricePerScoop * 1.42;
+            totalPrice = this.numScoops * pricePerScoop * 1.42;
         }
         else {
-            totalPrice = numScoops * pricePerScoop;
+            totalPrice = this.numScoops * pricePerScoop;
+        }
+
+        for (Topping price : toppings) {
+            totalPrice += price.getCost();
+        }
+
+        return totalPrice;
+    }
+
+    public double finalPrice() {
+        finalTotal += calcTotal();
+        return finalTotal;
+    }
+
+    public void setToppings(ArrayList<Topping> topTemp) {
+        for (Topping item : topTemp) {
+            toppings.add(item);
         }
     }
 
+    public void iceCreamInfo() {
+        System.out.println("Flavor: " + flavor);
+        System.out.println("Scoops: " + numScoops);
+        System.out.println("Deluxe: " + isDeluxeBrand);
+        System.out.print("Toppings:");
+
+        if (toppings.isEmpty()) {
+            System.out.print(" NONE");
+        }
+        else {
+            for (Topping item : toppings) {
+                System.out.print(" " + item.getType());
+            }
+        }
+        
+        System.out.println();
+        System.out.printf("Total: $%.2f\n", calcTotal());
+        System.out.println();
+    }
+    
 }
